@@ -56,3 +56,11 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+// make sure messages send on disconnection
+
+// add demo user
+
+// maybe add status???
+
+// add login through google or github???
