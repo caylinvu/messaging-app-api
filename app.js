@@ -12,7 +12,7 @@ const logger = require('morgan');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api');
 
 const app = express();
 
@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -56,6 +56,39 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+// CREATE ROUTES FOR REST API (CHAT, USERS)
+
+// CREATE CONTROLLER FUNCTIONS TO GET THINGS FROM DATABASE, SAVE THINGS TO DATABASE, UPDATE THINGS IN DATABASE, AND DELETE THINGS IN DATABASE
+// -- (REST) FETCH USERS (EXCLUDING EMAIL ADDRESS AND PASSWORD)
+// -- (REST) FETCH CONVERSATIONS WITH A SPECIFIC MEMBER
+// -- (REST) FETCH MESSAGES IN CONVERSATIONS WITH A SPECIFIC MEMBER
+// -- (REST) CREATE USER
+// -- (SOCKET) CREATE CONVERSATION
+// -- (SOCKET) CREATE MESSAGE
+// -- UPDATE USER INFO
+// ------ (REST) PROFILE INFO ON ONE FUNCTION (FIRST NAME, LAST NAME, IMAGE, AND STATUS)
+// ------ (SOCKET) UPDATE ONLINE STATUS IN ITS OWN
+// -- UPDATE CONVERSATIONS
+// ------ (REST) GROUP INFO IN ONE FUNCTION (IMAGE AND NAME)
+// ------ (SOCKET? REST?) EXCLUSIONS IN ITS OWN FUNCTION (IF MEMBERS - EXCLUSIONS = 1, THEN DELETE CONVERSATION W/ MESSAGES)
+// -- (SOCKET? REST?) DELETE A CONVERSATION (ALONG WITH ITS MESSAGES)
+
+// ADD A LAST MESSAGE PROPERTY ON THE CONVERSATION????
+
+// POPULATE DATABASE WITH A SCRIPT
+
+// TEST DATABASE FUNCTIONS IN POSTMAN
+
+// SET UP PASSPORT AUTHENTICATION
+
+// SET UP JWT
+// VERIFY TOKEN ON CERTAIN ROUTES
+
+// SET UP SOCKET.IO
+// EMIT/RECEIVE FUNCTIONS WILL USE CONTROLLER FUNCTIONS TO UPDATE THINGS IN DATABASE
+
+// figure out in app notifications
 
 // make sure messages send on disconnection
 
