@@ -1,9 +1,10 @@
 const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 
-// Display all users
+// Display all users (excluding email address and password)
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  // insert code
+  const allUsers = await User.find({}, '-email -password').sort({ firstName: 1 }).exec();
+  return res.send(allUsers);
 });
 
 // Create new user
