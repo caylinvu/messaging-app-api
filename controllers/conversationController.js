@@ -22,3 +22,8 @@ exports.updateExclusions = asyncHandler(async (req, res, next) => {
 exports.createConversation = asyncHandler(async (req, res, next) => {
   // insert code
 });
+
+// Update last message
+exports.updateLastMessage = asyncHandler(async (req, res, next) => {
+  // insert code
+});
