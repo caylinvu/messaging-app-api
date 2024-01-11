@@ -6,6 +6,11 @@ exports.getAllMessages = asyncHandler(async (req, res, next) => {
   // insert code
 });
 
+// Display the last message from every conversation a user is apart of
+exports.getLastMessages = asyncHandler(async (req, res, next) => {
+  // insert code
+});
+
 // Display all messages from a specific conversation
 exports.getMessages = asyncHandler(async (req, res, next) => {
   // insert code

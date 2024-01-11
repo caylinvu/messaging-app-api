@@ -37,7 +37,10 @@ router.put(
 /* ~~~~~~~~~~MESSAGES~~~~~~~~~~ */
 
 // GET all messages from conversations that include the current user
-router.get('/users/:userId/messages', messageController.getAllMessages);
+router.get('/users/:userId/all-messages', messageController.getAllMessages);
+
+// GET all last messages from conversations that include the current user
+router.get('/users/:userId/last-messages', messageController.getLastMessages);
 
 // GET all messages from a specifc conversation
 router.get('/conversations/:conversationId/messages', messageController.getMessages);

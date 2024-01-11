@@ -6,8 +6,6 @@ const ConversationSchema = new Schema({
   members: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   exclude: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   isGroup: { type: Boolean, default: false, required: true },
-  lastMessage: { type: String },
-  lastTime: { type: Date },
   image: { type: String },
   groupName: { type: String },
 });
