@@ -90,6 +90,6 @@ module.exports = app;
 
 // add demo user
 
-// maybe add status???
+// add image shtuffffs
 
 // add login through google or github???
