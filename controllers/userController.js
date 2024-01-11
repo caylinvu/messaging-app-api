@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
+const bcrypt = require('bcryptjs');
 
 // Display all users (excluding email address and password)
 exports.getUsers = asyncHandler(async (req, res, next) => {
@@ -9,7 +10,18 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
 // Create new user
 exports.createUser = asyncHandler(async (req, res, next) => {
-  // insert code
+  const user = new User({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  });
+
+  bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+    user.password = hashedPassword;
+    await user.save();
+  });
+
+  return res.send(user);
 });
 
 // Update profile information (first name, last name, image, and status)
