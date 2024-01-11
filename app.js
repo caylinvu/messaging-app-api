@@ -74,6 +74,8 @@ module.exports = app;
 
 // TEST DATABASE FUNCTIONS IN POSTMAN
 
+// add timestamps to test data at some point and make them required in schema
+
 // SET UP PASSPORT AUTHENTICATION
 
 // SET UP JWT
