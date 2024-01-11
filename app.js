@@ -97,3 +97,5 @@ module.exports = app;
 // add ability to send images
 
 // add login through google or github???
+
+// go back later and change what is populating in queries!! only return fields that are needed in frontend!!
