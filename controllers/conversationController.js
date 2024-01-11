@@ -3,7 +3,10 @@ const asyncHandler = require('express-async-handler');
 
 // Display all conversations which include the current user
 exports.getConversations = asyncHandler(async (req, res, next) => {
-  // insert code
+  const userConversations = await Conversation.find({ members: req.params.userId })
+    .populate('members', '-email -password')
+    .exec();
+  return res.send(userConversations);
 });
 
 // Update group profile information (image and name)

@@ -72,8 +72,6 @@ module.exports = app;
 // ------ (SOCKET? REST?) EXCLUSIONS IN ITS OWN FUNCTION (IF MEMBERS - EXCLUSIONS = 1, THEN DELETE CONVERSATION W/ MESSAGES)
 // -- (SOCKET? REST?) DELETE A CONVERSATION (ALONG WITH ITS MESSAGES)
 
-// POPULATE DATABASE WITH A SCRIPT
-
 // TEST DATABASE FUNCTIONS IN POSTMAN
 
 // SET UP PASSPORT AUTHENTICATION
@@ -90,6 +88,10 @@ module.exports = app;
 
 // add demo user
 
-// add image shtuffffs
+// add images to test database
+
+// add ability to change profile picture
+
+// add ability to send images
 
 // add login through google or github???
