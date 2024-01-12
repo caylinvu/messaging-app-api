@@ -26,7 +26,21 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 
 // Update profile information (first name, last name, image, and status)
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  // insert code
+  const updatedInfo = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    image: req.body.image,
+    status: req.body.status,
+  };
+
+  await User.findByIdAndUpdate(
+    req.params.userId,
+    {
+      $set: updatedInfo,
+    },
+    {},
+  );
+  return res.send(updatedInfo);
 });
 
 /* ~~~~~~~~~~SOCKET~~~~~~~~~~ */
