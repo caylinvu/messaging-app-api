@@ -13,8 +13,8 @@ exports.getAllMessages = asyncHandler(async (req, res, next) => {
 // Display all messages from a specific conversation
 exports.getMessages = asyncHandler(async (req, res, next) => {
   const messagesInConversation = await Message.find({ conversation: req.params.conversationId })
-    .populate('conversation', '-lastMessage -timestamp')
-    .populate('author', '-email -password')
+    // .populate('conversation', '-lastMessage -timestamp')
+    .populate('author', 'firstName lastName')
     .sort({ timestamp: 1 })
     .exec();
   return res.send(messagesInConversation);
