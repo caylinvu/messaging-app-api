@@ -116,12 +116,12 @@ module.exports = app;
 // ------ (SOCKET? REST?) EXCLUSIONS IN ITS OWN FUNCTION (IF MEMBERS - EXCLUSIONS = 1, THEN DELETE CONVERSATION W/ MESSAGES)
 // -- (SOCKET? REST?) DELETE A CONVERSATION (ALONG WITH ITS MESSAGES)
 
-// VERIFY TOKEN ON CERTAIN ROUTES
-
 // SET UP SOCKET.IO
 // EMIT/RECEIVE FUNCTIONS WILL USE CONTROLLER FUNCTIONS TO UPDATE THINGS IN DATABASE
 // when login, connect to socket to set online status????
 // on refresh, send token to backend to verify
+
+// either verify token on certain routes or everytime the page refreshes
 
 // figure out in app notifications
 
@@ -138,3 +138,5 @@ module.exports = app;
 // add login through google or github???
 
 // go back later and change what is populating in queries!! only return fields that are needed in frontend!!
+
+// refactor to put passport strategies in their own folder and move login function to routes
