@@ -4,13 +4,14 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-// const session = require('express-session');
-// const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
-// const bcrypt = require('bcryptjs;');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
+const User = require('./models/user');
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 
@@ -30,6 +31,26 @@ async function main() {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// passport setup
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await User.findOne({ email: username });
+      if (!user) {
+        return done(null, false, { message: 'Email address does not exist, please try again' });
+      }
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        return done(null, false, { message: 'Incorrect password, please try again' });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }),
+);
+
+app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -38,6 +59,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
+
+app.post('/api/login', (req, res) => {
+  passport.authenticate('local', { session: false }, (err, user, info) => {
+    if (err || !user) {
+      return res.status(400).json(info);
+    } else {
+      jwt.sign({ user: user }, process.env.secret_key, { expiresIn: '1 day' }, (err, token) => {
+        res.json({
+          token: token,
+          user: {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            image: user.image,
+            bio: user.bio,
+            isOnline: user.isOnline,
+            timestamp: user.timestamp,
+          },
+        });
+      });
+    }
+  })(req, res);
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -72,19 +116,11 @@ module.exports = app;
 // ------ (SOCKET? REST?) EXCLUSIONS IN ITS OWN FUNCTION (IF MEMBERS - EXCLUSIONS = 1, THEN DELETE CONVERSATION W/ MESSAGES)
 // -- (SOCKET? REST?) DELETE A CONVERSATION (ALONG WITH ITS MESSAGES)
 
-// TEST DATABASE FUNCTIONS IN POSTMAN
-
-// add timestamps to (conversation) test data at some point and make them required in schema
-
-// change status to bio
-
-// SET UP PASSPORT AUTHENTICATION
-
-// SET UP JWT
 // VERIFY TOKEN ON CERTAIN ROUTES
 
 // SET UP SOCKET.IO
 // EMIT/RECEIVE FUNCTIONS WILL USE CONTROLLER FUNCTIONS TO UPDATE THINGS IN DATABASE
+// when login, connect to socket to set online status????
 
 // figure out in app notifications
 
