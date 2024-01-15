@@ -40,6 +40,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     },
     {},
   );
+
   return res.send(updatedInfo);
 });
 
@@ -48,4 +49,5 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 // Update online status
 exports.updateIsOnline = asyncHandler(async (req, res, next) => {
   // insert code
+  // need userId
 });

@@ -74,7 +74,9 @@ module.exports = app;
 
 // TEST DATABASE FUNCTIONS IN POSTMAN
 
-// add timestamps to test data at some point and make them required in schema
+// add timestamps to (conversation) test data at some point and make them required in schema
+
+// change status to bio
 
 // SET UP PASSPORT AUTHENTICATION
 

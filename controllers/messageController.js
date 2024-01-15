@@ -25,4 +25,5 @@ exports.getMessages = asyncHandler(async (req, res, next) => {
 // Create a message
 exports.createMessage = asyncHandler(async (req, res, next) => {
   // insert code
+  // need conversationId and authorId
 });
