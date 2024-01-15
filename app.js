@@ -121,6 +121,7 @@ module.exports = app;
 // SET UP SOCKET.IO
 // EMIT/RECEIVE FUNCTIONS WILL USE CONTROLLER FUNCTIONS TO UPDATE THINGS IN DATABASE
 // when login, connect to socket to set online status????
+// on refresh, send token to backend to verify
 
 // figure out in app notifications
 

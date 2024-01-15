@@ -3,10 +3,16 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const conversationController = require('../controllers/conversationController');
 const messageController = require('../controllers/messageController');
+const verifyToken = require('../middleware/verifyToken');
 
 /* GET API home page */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Messaging App API' });
+});
+
+// Testing verifyToken
+router.get('/token', verifyToken, function (req, res, next) {
+  res.render('index', { title: 'Token is valid' });
 });
 
 /* ~~~~~~~~~~USERS~~~~~~~~~~ */
