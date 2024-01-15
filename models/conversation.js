@@ -9,7 +9,7 @@ const ConversationSchema = new Schema({
   isGroup: { type: Boolean, default: false, required: true },
   image: { type: String },
   groupName: { type: String },
-  timestamp: { type: Date, default: new Date() },
+  timestamp: { type: Date, default: new Date(), required: true },
 });
 
 module.exports = mongoose.model('Conversation', ConversationSchema);

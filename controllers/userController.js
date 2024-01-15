@@ -30,7 +30,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     image: req.body.image,
-    status: req.body.status,
+    bio: req.body.bio,
   };
 
   await User.findByIdAndUpdate(

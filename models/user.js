@@ -8,7 +8,7 @@ const UserSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   image: { type: String },
-  status: { type: String },
+  bio: { type: String },
   isOnline: { type: Boolean, default: false, required: true },
   timestamp: { type: Date, default: new Date(), required: true },
 });
