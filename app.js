@@ -123,6 +123,8 @@ module.exports = app;
 
 // either verify token on certain routes or everytime the page refreshes
 
+// Refactor socket code (move database logic to controller functions)
+
 // figure out in app notifications
 
 // make sure messages send on disconnection
