@@ -3,9 +3,9 @@ const asyncHandler = require('express-async-handler');
 
 // Display all conversations which include the current user
 exports.getConversations = asyncHandler(async (req, res, next) => {
-  const userConversations = await Conversation.find({ members: req.params.userId })
-    .populate('members', '-email -password -status -timestamp -__v -image -isOnline')
-    .populate('exclude', '-email -password -status -timestamp -__v -image -isOnline')
+  const userConversations = await Conversation.find({ 'members.member': req.params.userId })
+    .populate('members.member', '-email -password -bio -timestamp -__v -image -isOnline')
+    .populate('exclude', '-email -password -bio -timestamp -__v -image -isOnline')
     .populate('lastMessage', '-conversation -author -_id -__v')
     .exec();
   return res.send(userConversations);
@@ -48,6 +48,29 @@ exports.updateExclusions = asyncHandler(async (req, res, next) => {
   );
 
   return res.send(updatedInfo);
+});
+
+// Update user's last read timestamp in a conversation
+exports.updateTimestamp = asyncHandler(async (req, res, next) => {
+  const conversation = await Conversation.findById(req.params.conversationId);
+  const updatedMembers = conversation.members.map((obj) => {
+    if (req.params.userId === obj.member.toString()) {
+      obj.lastRead = new Date();
+      return obj;
+    } else {
+      return obj;
+    }
+  });
+
+  await Conversation.findByIdAndUpdate(
+    req.params.conversationId,
+    {
+      $set: { members: updatedMembers },
+    },
+    {},
+  );
+
+  return res.send({ members: updatedMembers });
 });
 
 /* ~~~~~~~~~~SOCKET~~~~~~~~~~ */

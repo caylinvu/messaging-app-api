@@ -19,6 +19,12 @@ io.on('connection', (socket) => {
     console.log('A user disconnected');
   });
 
+  // JOIN CURRENT USER'S ROOMS:
+  // Get array of current user's rooms (send from frontend with socket info)
+  // Use socket.join(array); to join all rooms
+  // Join room when creating a new conversation and emit new conv only to that room
+  // Emit new messages only to room with the current conversation id
+
   // Create a new conversation
   socket.on(
     'createConversation',

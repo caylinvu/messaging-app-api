@@ -31,13 +31,19 @@ router.put('/users/:userId', userController.updateUser);
 // GET all conversations which include the current user
 router.get('/users/:userId/conversations', conversationController.getConversations);
 
-// PUT group profile information
+// PUT update group profile information (name & image)
 router.put('/conversations/:conversationId', conversationController.updateConversation);
 
-// PUT group exclusions
+// PUT update group exclusions
 router.put(
   '/conversations/:conversationId/exclude/:userId',
   conversationController.updateExclusions,
+);
+
+// PUT update last read timestamp
+router.put(
+  '/conversations/:conversationId/timestamp/:userId',
+  conversationController.updateTimestamp,
 );
 
 /* ~~~~~~~~~~MESSAGES~~~~~~~~~~ */
