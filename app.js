@@ -67,15 +67,9 @@ app.post('/api/login', (req, res) => {
     } else {
       jwt.sign({ user: user }, process.env.secret_key, { expiresIn: '1 day' }, (err, token) => {
         res.json({
-          token: token,
           user: {
             _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            image: user.image,
-            bio: user.bio,
-            isOnline: user.isOnline,
-            timestamp: user.timestamp,
+            token: token,
           },
         });
       });
