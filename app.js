@@ -121,7 +121,7 @@ module.exports = app;
 // when login, connect to socket to set online status????
 // on refresh, send token to backend to verify
 
-// either verify token on certain routes or everytime the page refreshes
+// when sending a message, clear conversation exclusions if there are any
 
 // Refactor socket code (move database logic to controller functions)
 

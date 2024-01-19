@@ -12,11 +12,15 @@ io.on('connection', (socket) => {
   // Set user.isOnline to true *******
   console.log('A user connected');
   console.log(socket.request.user);
+  // Update in database
+  // Emit user.isOnline status to all users
 
   // Socket disconnection
   socket.on('disconnect', () => {
     // Set user.isOnline to false *******
     console.log('A user disconnected');
+    // Update in database
+    // Emit user.isOnline status to all users
   });
 
   // JOIN CURRENT USER'S ROOMS:

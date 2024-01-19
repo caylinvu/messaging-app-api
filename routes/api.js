@@ -18,40 +18,46 @@ router.get('/token', verifyToken, function (req, res, next) {
 /* ~~~~~~~~~~USERS~~~~~~~~~~ */
 
 // GET all users
-router.get('/users', userController.getUsers);
+router.get('/users', verifyToken, userController.getUsers);
 
 // POST new users
 router.post('/users', userController.createUser);
 
 // PUT user profile information
-router.put('/users/:userId', userController.updateUser);
+router.put('/users/:userId', verifyToken, userController.updateUser);
 
 /* ~~~~~~~~~~CONVERSATIONS~~~~~~~~~~ */
 
 // GET all conversations which include the current user
-router.get('/users/:userId/conversations', conversationController.getConversations);
+router.get('/users/:userId/conversations', verifyToken, conversationController.getConversations);
 
 // PUT update group profile information (name & image)
-router.put('/conversations/:conversationId', conversationController.updateConversation);
+router.put(
+  '/conversations/:conversationId',
+  verifyToken,
+  conversationController.updateConversation,
+);
 
 // PUT update group exclusions
 router.put(
   '/conversations/:conversationId/exclude/:userId',
+  verifyToken,
   conversationController.updateExclusions,
 );
 
 // PUT update last read timestamp
 router.put(
   '/conversations/:conversationId/timestamp/:userId',
+  verifyToken,
   conversationController.updateTimestamp,
 );
 
 /* ~~~~~~~~~~MESSAGES~~~~~~~~~~ */
 
 // GET all messages from conversations that include the current user
-router.get('/users/:userId/all-messages', messageController.getAllMessages);
+router.get('/users/:userId/all-messages', verifyToken, messageController.getAllMessages);
 
 // GET all messages from a specifc conversation
-router.get('/conversations/:conversationId/messages', messageController.getMessages);
+router.get('/conversations/:conversationId/messages', verifyToken, messageController.getMessages);
 
 module.exports = router;
