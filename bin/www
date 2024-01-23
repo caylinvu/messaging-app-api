@@ -21,7 +21,11 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-socketApi.io.attach(server);
+socketApi.io.attach(server, {
+  cors: {
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+  },
+});
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -17,6 +17,14 @@ const apiRouter = require('./routes/api');
 
 const app = express();
 
+// cors setup
+const cors = require('cors');
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 // mongoose connection setup
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
@@ -37,7 +45,7 @@ passport.use(
     try {
       const user = await User.findOne({ email: username });
       if (!user) {
-        return done(null, false, { message: 'Email address does not exist, please try again' });
+        return done(null, false, { message: 'Email does not exist, please try again' });
       }
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
@@ -116,6 +124,8 @@ module.exports = app;
 // on refresh, send token to backend to verify
 
 // when sending a message, clear conversation exclusions if there are any
+
+// add verifyToken back to routes
 
 // Refactor socket code (move database logic to controller functions)
 
