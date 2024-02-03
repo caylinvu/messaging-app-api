@@ -12,6 +12,7 @@ const Message = require('./models/message');
 io.on(
   'connection',
   asyncHandler(async (socket) => {
+    // Handle socket connection
     const currentUser = {
       _id: socket.handshake.auth.user,
       isOnline: true,
@@ -30,7 +31,7 @@ io.on(
     // Emit user.isOnline status to all users
     io.emit('onlineStatus', currentUser);
 
-    // Socket disconnection
+    // Handle socket disconnection
     socket.on(
       'disconnect',
       asyncHandler(async () => {
@@ -50,13 +51,18 @@ io.on(
       }),
     );
 
-    // add token verification
-
     // JOIN CURRENT USER'S ROOMS:
-    // Get array of current user's rooms (send from frontend with socket info)
+    // Get array of current user's rooms
     // Use socket.join(array); to join all rooms
     // Join room when creating a new conversation and emit new conv only to that room
     // Emit new messages only to room with the current conversation id
+
+    // Join rooms of current user
+    const conversations = await Conversation.find({ 'members.member': currentUser._id }).exec();
+    const convArray = conversations.map((conv) => {
+      return conv._id.toString();
+    });
+    socket.join(convArray);
 
     // Create a new conversation
     socket.on(
@@ -72,8 +78,12 @@ io.on(
 
         console.log('Conversation created in database');
 
+        // Join room when creating new conversation
+        const currentRoom = conversation._id.toString();
+        socket.join(currentRoom);
+
         // Emit the new conversation to relevant users
-        io.emit('createConversation', conversation);
+        io.to(currentRoom).emit('createConversation', conversation);
       }),
     );
 
@@ -108,3 +118,5 @@ io.on(
 );
 
 module.exports = socketApi;
+
+// ADD TOKEN VERIFICATION
