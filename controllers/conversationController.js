@@ -4,8 +4,6 @@ const asyncHandler = require('express-async-handler');
 // Display all conversations which include the current user
 exports.getConversations = asyncHandler(async (req, res, next) => {
   const userConversations = await Conversation.find({ 'members.member': req.params.userId })
-    .populate('members.member', '-email -password -bio -timestamp -__v -image -isOnline')
-    .populate('exclude', '-email -password -bio -timestamp -__v -image -isOnline')
     .populate('lastMessage', '-conversation -author -_id -__v')
     .exec();
   return res.send(userConversations);

@@ -19,10 +19,12 @@ io.on(
     };
     // Set user.isOnline to true *******
     console.log('A user connected');
-    console.log(socket.handshake.auth);
+    // console.log(socket.handshake.auth);
+    // console.log(io.sockets.sockets.get(socket.id).handshake.auth.user);
+
     // Update in database
     await User.findByIdAndUpdate(
-      socket.handshake.auth.user,
+      currentUser._id,
       {
         $set: { isOnline: true },
       },
@@ -39,7 +41,7 @@ io.on(
         console.log('A user disconnected');
         // Update in database
         await User.findByIdAndUpdate(
-          socket.handshake.auth.user,
+          currentUser._id,
           {
             $set: { isOnline: false },
           },
@@ -67,12 +69,13 @@ io.on(
     // Create a new conversation
     socket.on(
       'createConversation',
-      asyncHandler(async (conv) => {
+      asyncHandler(async (convData) => {
         // Save conversation to database
         const conversation = new Conversation({
-          members: conv.members,
-          isGroup: conv.isGroup,
-          groupName: conv.groupName,
+          members: convData.conv.members,
+          isGroup: convData.conv.isGroup,
+          groupName: convData.conv.groupName,
+          timestamp: convData.conv.timestamp,
         });
         await conversation.save();
 
@@ -82,8 +85,19 @@ io.on(
         const currentRoom = conversation._id.toString();
         socket.join(currentRoom);
 
+        // Find other user's socket and join room
+        const sockets = await io.fetchSockets();
+        const otherSocket = sockets.find((obj) => obj.handshake.auth.user === convData.receiver);
+        otherSocket.join(currentRoom);
+
+        // Add data to object to send to frontend
+        const data = {
+          conversation: conversation,
+          sender: currentUser._id,
+        };
+
         // Emit the new conversation to relevant users
-        io.to(currentRoom).emit('createConversation', conversation);
+        io.to(currentRoom).emit('createConversation', data);
       }),
     );
 
