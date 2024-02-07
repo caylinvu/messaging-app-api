@@ -14,7 +14,7 @@ exports.getAllMessages = asyncHandler(async (req, res, next) => {
 exports.getMessages = asyncHandler(async (req, res, next) => {
   const messagesInConversation = await Message.find({ conversation: req.params.conversationId })
     // .populate('conversation', '-lastMessage -timestamp')
-    .populate('author', 'firstName lastName')
+    // .populate('author', 'firstName lastName')
     .sort({ timestamp: 1 })
     .exec();
   return res.send(messagesInConversation);

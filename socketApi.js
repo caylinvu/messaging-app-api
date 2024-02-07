@@ -53,12 +53,6 @@ io.on(
       }),
     );
 
-    // JOIN CURRENT USER'S ROOMS:
-    // Get array of current user's rooms
-    // Use socket.join(array); to join all rooms
-    // Join room when creating a new conversation and emit new conv only to that room
-    // Emit new messages only to room with the current conversation id
-
     // Join rooms of current user
     const conversations = await Conversation.find({ 'members.member': currentUser._id }).exec();
     const convArray = conversations.map((conv) => {
@@ -103,7 +97,7 @@ io.on(
 
     // Listen for a new message
     socket.on(
-      'message',
+      'sendMessage',
       asyncHandler(async (msg) => {
         console.log('Message received by server');
         console.log(msg);
@@ -114,6 +108,7 @@ io.on(
           author: msg.author,
           conversation: msg.conversation,
           image: msg.image,
+          timestamp: msg.timestamp,
         });
         await message.save();
 
@@ -124,8 +119,11 @@ io.on(
           {},
         );
 
-        // Emit message to sockets
-        io.emit('message', message);
+        const currentRoom = message.conversation.toString();
+
+        // Emit message to sockets with current roomId
+        io.to(currentRoom).emit('receiveMessage', message);
+        io.to(currentRoom).emit('receiveMessagePrev', message);
       }),
     );
   }),

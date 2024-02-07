@@ -53,7 +53,7 @@ exports.updateTimestamp = asyncHandler(async (req, res, next) => {
   const conversation = await Conversation.findById(req.params.conversationId);
   const updatedMembers = conversation.members.map((obj) => {
     if (req.params.userId === obj.member.toString()) {
-      obj.lastRead = new Date();
+      obj.lastRead = req.body.timestamp;
       return obj;
     } else {
       return obj;
