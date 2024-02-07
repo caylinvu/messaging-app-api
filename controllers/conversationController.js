@@ -3,8 +3,8 @@ const asyncHandler = require('express-async-handler');
 
 // Display all conversations which include the current user
 exports.getConversations = asyncHandler(async (req, res, next) => {
-  const userConversations = await Conversation.find({ 'members.member': req.params.userId })
-    .populate('lastMessage', '-conversation -author -_id -__v')
+  const userConversations = await Conversation.find({ members: req.params.userId })
+    .populate('lastMessage', 'text timestamp image')
     .exec();
   return res.send(userConversations);
 });
@@ -31,10 +31,10 @@ exports.updateConversation = asyncHandler(async (req, res, next) => {
 exports.updateExclusions = asyncHandler(async (req, res, next) => {
   const conversation = await Conversation.findById(req.params.conversationId);
   const exclusions = conversation.exclude;
-  exclusions.push(req.params.userId);
+  // exclusions.push(req.params.userId);
 
   const updatedInfo = {
-    exclude: exclusions,
+    exclude: [...exclusions, req.params.userId],
   };
 
   await Conversation.findByIdAndUpdate(
@@ -49,27 +49,27 @@ exports.updateExclusions = asyncHandler(async (req, res, next) => {
 });
 
 // Update user's last read timestamp in a conversation
-exports.updateTimestamp = asyncHandler(async (req, res, next) => {
-  const conversation = await Conversation.findById(req.params.conversationId);
-  const updatedMembers = conversation.members.map((obj) => {
-    if (req.params.userId === obj.member.toString()) {
-      obj.lastRead = req.body.timestamp;
-      return obj;
-    } else {
-      return obj;
-    }
-  });
+// exports.updateTimestamp = asyncHandler(async (req, res, next) => {
+//   const conversation = await Conversation.findById(req.params.conversationId);
+//   const updatedMembers = conversation.members.map((obj) => {
+//     if (req.params.userId === obj.member.toString()) {
+//       obj.lastRead = req.body.timestamp;
+//       return obj;
+//     } else {
+//       return obj;
+//     }
+//   });
 
-  await Conversation.findByIdAndUpdate(
-    req.params.conversationId,
-    {
-      $set: { members: updatedMembers },
-    },
-    {},
-  );
+//   await Conversation.findByIdAndUpdate(
+//     req.params.conversationId,
+//     {
+//       $set: { members: updatedMembers },
+//     },
+//     {},
+//   );
 
-  return res.send({ members: updatedMembers });
-});
+//   return res.send({ members: updatedMembers });
+// });
 
 /* ~~~~~~~~~~SOCKET~~~~~~~~~~ */
 

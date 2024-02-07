@@ -14,6 +14,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
+    timestamp: req.body.timestamp,
   });
 
   bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
@@ -42,6 +43,31 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   );
 
   return res.send(updatedInfo);
+});
+
+// Update user's last read timestamp in conversation
+exports.updateTimestamp = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.userId).exec();
+  const updatedConvs = user.convData.map((obj) => {
+    if (req.params.conversationId === obj.conv.toString()) {
+      return {
+        ...obj,
+        lastRead: req.body.timestamp,
+      };
+    } else {
+      return obj;
+    }
+  });
+
+  await User.findByIdAndUpdate(
+    req.params.userId,
+    {
+      $set: { convData: updatedConvs },
+    },
+    {},
+  );
+
+  return res.send({ convData: updatedConvs });
 });
 
 /* ~~~~~~~~~~SOCKET~~~~~~~~~~ */

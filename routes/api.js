@@ -26,6 +26,13 @@ router.post('/users', userController.createUser);
 // PUT user profile information
 router.put('/users/:userId', /* verifyToken, */ userController.updateUser);
 
+// PUT update last read timestamp
+router.put(
+  '/users/:userId/timestamp/:conversationId',
+  /* verifyToken, */
+  userController.updateTimestamp,
+);
+
 /* ~~~~~~~~~~CONVERSATIONS~~~~~~~~~~ */
 
 // GET all conversations which include the current user
@@ -46,13 +53,6 @@ router.put(
   '/conversations/:conversationId/exclude/:userId',
   /* verifyToken, */
   conversationController.updateExclusions,
-);
-
-// PUT update last read timestamp
-router.put(
-  '/conversations/:conversationId/timestamp/:userId',
-  /* verifyToken, */
-  conversationController.updateTimestamp,
 );
 
 /* ~~~~~~~~~~MESSAGES~~~~~~~~~~ */

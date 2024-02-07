@@ -33,6 +33,13 @@ io.on(
     // Emit user.isOnline status to all users
     io.emit('onlineStatus', currentUser);
 
+    // Join rooms of current user
+    const conversations = await Conversation.find({ members: currentUser._id }).exec();
+    const convArray = conversations.map((conv) => {
+      return conv._id.toString();
+    });
+    socket.join(convArray);
+
     // Handle socket disconnection
     socket.on(
       'disconnect',
@@ -53,13 +60,6 @@ io.on(
       }),
     );
 
-    // Join rooms of current user
-    const conversations = await Conversation.find({ 'members.member': currentUser._id }).exec();
-    const convArray = conversations.map((conv) => {
-      return conv._id.toString();
-    });
-    socket.join(convArray);
-
     // Create a new conversation
     socket.on(
       'createConversation',
@@ -74,6 +74,19 @@ io.on(
         await conversation.save();
 
         console.log('Conversation created in database');
+
+        // Update user conversations in database
+        await User.updateMany(
+          { _id: { $in: convData.conv.members } },
+          {
+            $push: {
+              convData: {
+                conv: conversation._id,
+              },
+            },
+          },
+          { multi: true },
+        );
 
         // Join room when creating new conversation
         const currentRoom = conversation._id.toString();
