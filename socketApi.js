@@ -97,7 +97,9 @@ io.on(
         // Find other user's socket and join room
         const sockets = await io.fetchSockets();
         const otherSocket = sockets.find((obj) => obj.handshake.auth.user === convData.receiver);
-        otherSocket.join(currentRoom);
+        if (otherSocket) {
+          otherSocket.join(currentRoom);
+        }
 
         // Add data to object to send to frontend
         const data = {
@@ -108,7 +110,7 @@ io.on(
         // console.log(data);
 
         // Emit the new conversation to relevant users
-        io.to(currentRoom).emit('createConversation', data);
+        io.to(currentRoom).emit('receiveConversation', data);
       }),
     );
 

@@ -108,15 +108,10 @@ app.use(function (err, req, res, next) {
 module.exports = app;
 
 // CREATE CONTROLLER FUNCTIONS TO GET THINGS FROM DATABASE, SAVE THINGS TO DATABASE, UPDATE THINGS IN DATABASE, AND DELETE THINGS IN DATABASE
-// -- (REST) FETCH USERS (EXCLUDING EMAIL ADDRESS AND PASSWORD)
-// -- (REST) FETCH CONVERSATIONS WITH A SPECIFIC MEMBER
-// -- (REST) FETCH MESSAGES IN CONVERSATIONS WITH A SPECIFIC MEMBER
 // -- (REST) CREATE USER
-// -- (SOCKET) CREATE CONVERSATION
-// -- (SOCKET) CREATE MESSAGE
+// -- (SOCKET) CREATE GROUP CONVERSATION
 // -- UPDATE USER INFO
 // ------ (REST) PROFILE INFO ON ONE FUNCTION (FIRST NAME, LAST NAME, IMAGE, AND STATUS)
-// ------ (SOCKET) UPDATE ONLINE STATUS IN ITS OWN
 // -- UPDATE CONVERSATIONS
 // ------ (REST) GROUP INFO IN ONE FUNCTION (IMAGE AND NAME)
 // ------ (SOCKET? REST?) EXCLUSIONS IN ITS OWN FUNCTION (IF MEMBERS - EXCLUSIONS = 1, THEN DELETE CONVERSATION W/ MESSAGES)
@@ -127,17 +122,11 @@ module.exports = app;
 // when login, connect to socket to set online status????
 // on refresh, send token to backend to verify
 
-// UPDATE DATA STRUCTURES
-
 // when sending a message, clear conversation exclusions if there are any
 
 // add verifyToken back to routes
 
 // Refactor socket code (move database logic to controller functions)
-
-// figure out in app notifications
-
-// make sure messages send on disconnection
 
 // add demo user
 
