@@ -88,6 +88,8 @@ io.on(
           { multi: true },
         );
 
+        console.log('Conversation added to user data');
+
         // Join room when creating new conversation
         const currentRoom = conversation._id.toString();
         socket.join(currentRoom);
@@ -102,6 +104,8 @@ io.on(
           conversation: conversation,
           sender: currentUser._id,
         };
+
+        // console.log(data);
 
         // Emit the new conversation to relevant users
         io.to(currentRoom).emit('createConversation', data);

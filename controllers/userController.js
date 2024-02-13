@@ -50,15 +50,12 @@ exports.updateTimestamp = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.userId).exec();
   const updatedConvs = user.convData.map((obj) => {
     if (req.params.conversationId === obj.conv.toString()) {
-      return {
-        ...obj,
-        lastRead: req.body.timestamp,
-      };
+      obj.lastRead = req.body.timestamp;
+      return obj;
     } else {
       return obj;
     }
   });
-
   await User.findByIdAndUpdate(
     req.params.userId,
     {
