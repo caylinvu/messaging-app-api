@@ -29,7 +29,7 @@ exports.updateConversation = asyncHandler(async (req, res, next) => {
 
 // Update group exclusions
 exports.updateExclusions = asyncHandler(async (req, res, next) => {
-  const conversation = await Conversation.findById(req.params.conversationId);
+  const conversation = await Conversation.findById(req.params.conversationId).exec();
   const exclusions = conversation.exclude;
   // exclusions.push(req.params.userId);
 

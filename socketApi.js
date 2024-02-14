@@ -13,10 +13,9 @@ io.on(
   'connection',
   asyncHandler(async (socket) => {
     // Handle socket connection
-    const currentUser = {
-      _id: socket.handshake.auth.user,
-      isOnline: true,
-    };
+    const currentUser = await User.findById(socket.handshake.auth.user, '-email -password').exec();
+    currentUser.isOnline = true;
+
     // Set user.isOnline to true *******
     console.log('A user connected');
     // console.log(socket.handshake.auth);

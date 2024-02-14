@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Display all users (excluding email address and password)
 exports.getUsers = asyncHandler(async (req, res, next) => {
@@ -17,12 +18,32 @@ exports.createUser = asyncHandler(async (req, res, next) => {
     timestamp: req.body.timestamp,
   });
 
-  bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-    user.password = hashedPassword;
-    await user.save();
-  });
+  bcrypt.hash(
+    req.body.password,
+    10,
+    asyncHandler(async (err, hashedPassword) => {
+      user.password = hashedPassword;
+      if (err) {
+        return res.status(400).json(err);
+      } else {
+        await user.save();
+        jwt.sign(
+          { user: user },
+          process.env.secret_key,
+          /* { expiresIn: '1 day' }, */ (err, token) => {
+            res.json({
+              user: {
+                _id: user._id,
+                token: token,
+              },
+            });
+          },
+        );
+      }
+    }),
+  );
 
-  return res.send(user);
+  // return res.send(user);
 });
 
 // Update profile information (first name, last name, image, and status)
