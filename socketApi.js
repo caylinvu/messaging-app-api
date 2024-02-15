@@ -30,7 +30,7 @@ io.on(
       {},
     );
     // Emit user.isOnline status to all users
-    io.emit('onlineStatus', currentUser);
+    socket.broadcast.emit('onlineStatus', currentUser);
 
     // Join rooms of current user
     const conversations = await Conversation.find({ members: currentUser._id }).exec();

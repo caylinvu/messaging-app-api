@@ -27,18 +27,14 @@ exports.createUser = asyncHandler(async (req, res, next) => {
         return res.status(400).json(err);
       } else {
         await user.save();
-        jwt.sign(
-          { user: user },
-          process.env.secret_key,
-          /* { expiresIn: '1 day' }, */ (err, token) => {
-            res.json({
-              user: {
-                _id: user._id,
-                token: token,
-              },
-            });
-          },
-        );
+        jwt.sign({ user: user }, process.env.secret_key, (err, token) => {
+          res.json({
+            user: {
+              _id: user._id,
+              token: token,
+            },
+          });
+        });
       }
     }),
   );
