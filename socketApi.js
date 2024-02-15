@@ -93,11 +93,13 @@ io.on(
         const currentRoom = conversation._id.toString();
         socket.join(currentRoom);
 
-        // Find other user's socket and join room
+        // Find other chat member sockets and join room
         const sockets = await io.fetchSockets();
-        const otherSocket = sockets.find((obj) => obj.handshake.auth.user === convData.receiver);
-        if (otherSocket) {
-          otherSocket.join(currentRoom);
+        const otherSockets = sockets.filter((obj) =>
+          convData.receivers.includes(obj.handshake.auth.user),
+        );
+        if (otherSockets.length > 0) {
+          otherSockets.forEach((obj) => obj.join(currentRoom));
         }
 
         // Add data to object to send to frontend
