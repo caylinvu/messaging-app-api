@@ -124,6 +124,8 @@ module.exports = app;
 
 // Refactor socket code (move database logic to controller functions)
 
+// Maybe refactor some functions to take advantage of $push and $pull more
+
 // add demo user
 
 // add images to test database
