@@ -1,4 +1,6 @@
 const Conversation = require('../models/conversation');
+const Message = require('../models/message');
+const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 
 // Display all conversations which include the current user
@@ -27,14 +29,52 @@ exports.updateConversation = asyncHandler(async (req, res, next) => {
   return res.send(updatedInfo);
 });
 
-// Update group exclusions
-exports.updateExclusions = asyncHandler(async (req, res, next) => {
+// Update group exclusions (or delete conv if all users in group > 2 are excluded)
+exports.addExclusion = asyncHandler(async (req, res, next) => {
   const conversation = await Conversation.findById(req.params.conversationId).exec();
   const exclusions = conversation.exclude;
-  // exclusions.push(req.params.userId);
 
   const updatedInfo = {
     exclude: [...exclusions, req.params.userId],
+  };
+
+  if (
+    conversation.members.length > 2 &&
+    updatedInfo.exclude.length === conversation.members.length
+  ) {
+    await Promise.all([
+      await Conversation.findByIdAndDelete(req.params.conversationId),
+      await Message.deleteMany({ conversation: req.params.conversationId }),
+      await User.updateMany(
+        { _id: { $in: conversation.members } },
+        {
+          $pull: { convData: { conv: req.params.conversationId } },
+        },
+        { multi: true },
+      ),
+    ]);
+  } else {
+    await Conversation.findByIdAndUpdate(
+      req.params.conversationId,
+      {
+        $set: updatedInfo,
+      },
+      {},
+    );
+  }
+
+  return res.send(updatedInfo);
+});
+
+// Remove an id from exclusions (only on conversations between 2 people)
+exports.removeExclusion = asyncHandler(async (req, res, next) => {
+  const conversation = await Conversation.findById(req.params.conversationId).exec();
+  const exclusions = conversation.exclude.filter((obj) => obj.toString() !== req.params.userId);
+
+  console.log(exclusions);
+
+  const updatedInfo = {
+    exclude: exclusions,
   };
 
   await Conversation.findByIdAndUpdate(
@@ -47,29 +87,6 @@ exports.updateExclusions = asyncHandler(async (req, res, next) => {
 
   return res.send(updatedInfo);
 });
-
-// Update user's last read timestamp in a conversation
-// exports.updateTimestamp = asyncHandler(async (req, res, next) => {
-//   const conversation = await Conversation.findById(req.params.conversationId);
-//   const updatedMembers = conversation.members.map((obj) => {
-//     if (req.params.userId === obj.member.toString()) {
-//       obj.lastRead = req.body.timestamp;
-//       return obj;
-//     } else {
-//       return obj;
-//     }
-//   });
-
-//   await Conversation.findByIdAndUpdate(
-//     req.params.conversationId,
-//     {
-//       $set: { members: updatedMembers },
-//     },
-//     {},
-//   );
-
-//   return res.send({ members: updatedMembers });
-// });
 
 /* ~~~~~~~~~~SOCKET~~~~~~~~~~ */
 

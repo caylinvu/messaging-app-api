@@ -135,7 +135,7 @@ io.on(
         // Save message as last message in conversation
         await Conversation.findByIdAndUpdate(
           msg.conversation,
-          { $set: { lastMessage: message._id } },
+          { $set: { lastMessage: message._id, exclude: [] } },
           {},
         );
 

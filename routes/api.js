@@ -48,11 +48,17 @@ router.put(
   conversationController.updateConversation,
 );
 
-// PUT update group exclusions
+// PUT add group exclusion
 router.put(
   '/conversations/:conversationId/exclude/:userId',
   /* verifyToken, */
-  conversationController.updateExclusions,
+  conversationController.addExclusion,
+);
+
+// PUT remove group exclusion
+router.put(
+  '/conversations/:conversationId/include/:userId',
+  conversationController.removeExclusion,
 );
 
 /* ~~~~~~~~~~MESSAGES~~~~~~~~~~ */
