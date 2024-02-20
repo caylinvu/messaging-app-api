@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const conversationController = require('../controllers/conversationController');
 const messageController = require('../controllers/messageController');
+const imgController = require('../controllers/imgController');
 const verifyToken = require('../middleware/verifyToken');
 
 /* GET API home page */
@@ -67,10 +68,21 @@ router.put(
 // GET all messages from conversations that include the current user
 router.get('/users/:userId/all-messages', /* verifyToken, */ messageController.getAllMessages);
 
-// GET all messages from a specifc conversation
+// GET all messages from a specific conversation
 router.get(
   '/conversations/:conversationId/messages',
   /* verifyToken, */ messageController.getMessages,
 );
+
+/* ~~~~~~~~~~IMAGES~~~~~~~~~~ */
+
+// GET user profile picture
+router.get('/img/user/:userId', imgController.getUserImage);
+
+// GET group chat image
+router.get('/img/conversation/:conversationId', imgController.getGroupImage);
+
+// GET message image
+router.get('/img/message/:messageId', imgController.getMessageImage);
 
 module.exports = router;
