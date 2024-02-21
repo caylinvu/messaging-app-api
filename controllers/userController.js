@@ -2,6 +2,7 @@ const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // Display all users (excluding email address and password)
 exports.getUsers = asyncHandler(async (req, res, next) => {
@@ -47,9 +48,16 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   const updatedInfo = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    image: req.body.image,
+    image: req.file ? req.file.filename : req.body.lastImage,
     bio: req.body.bio,
   };
+
+  // If req.file && req.body.lastImage, then delete last image from files
+  if (req.file && req.body.lastImage) {
+    fs.unlink(`public/images/${req.body.lastImage}`, (err) => {
+      if (err) console.log(err);
+    });
+  }
 
   await User.findByIdAndUpdate(
     req.params.userId,

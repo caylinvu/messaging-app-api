@@ -5,6 +5,7 @@ const conversationController = require('../controllers/conversationController');
 const messageController = require('../controllers/messageController');
 const imgController = require('../controllers/imgController');
 const verifyToken = require('../middleware/verifyToken');
+const upload = require('../middleware/upload');
 
 /* GET API home page */
 router.get('/', function (req, res, next) {
@@ -25,7 +26,7 @@ router.get('/users', /* verifyToken, */ userController.getUsers);
 router.post('/users', userController.createUser);
 
 // PUT user profile information
-router.put('/users/:userId', /* verifyToken, */ userController.updateUser);
+router.put('/users/:userId', upload.single('image'), userController.updateUser);
 
 // PUT update last read timestamp
 router.put(
