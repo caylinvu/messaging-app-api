@@ -2,6 +2,7 @@ const Conversation = require('../models/conversation');
 const Message = require('../models/message');
 const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
+const fs = require('fs');
 
 // Display all conversations which include the current user
 exports.getConversations = asyncHandler(async (req, res, next) => {
@@ -14,9 +15,16 @@ exports.getConversations = asyncHandler(async (req, res, next) => {
 // Update group profile information (image and name)
 exports.updateConversation = asyncHandler(async (req, res, next) => {
   const updatedInfo = {
-    image: req.body.image,
     groupName: req.body.groupName,
+    image: req.file ? req.file.filename : req.body.lastImage,
   };
+
+  // If req.file && req.body.lastImage, then delete last image from files
+  if (req.file && req.body.lastImage) {
+    fs.unlink(`public/images/${req.body.lastImage}`, (err) => {
+      if (err) console.log(err);
+    });
+  }
 
   await Conversation.findByIdAndUpdate(
     req.params.conversationId,
@@ -42,6 +50,11 @@ exports.addExclusion = asyncHandler(async (req, res, next) => {
     conversation.members.length > 2 &&
     updatedInfo.exclude.length === conversation.members.length
   ) {
+    if (conversation.image) {
+      fs.unlink(`public/images/${conversation.image}`, (err) => {
+        if (err) console.log(err);
+      });
+    }
     await Promise.all([
       await Conversation.findByIdAndDelete(req.params.conversationId),
       await Message.deleteMany({ conversation: req.params.conversationId }),

@@ -46,7 +46,7 @@ router.get(
 // PUT update group profile information (name & image)
 router.put(
   '/conversations/:conversationId',
-  /* verifyToken, */
+  upload.single('image'),
   conversationController.updateConversation,
 );
 
