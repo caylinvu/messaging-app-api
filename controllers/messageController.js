@@ -20,6 +20,16 @@ exports.getMessages = asyncHandler(async (req, res, next) => {
   return res.send(messagesInConversation);
 });
 
+// Upload an image linked to a message
+exports.uploadImage = asyncHandler(async (req, res, next) => {
+  console.log('image uploaded successfully');
+  const uploadInfo = {
+    image: req.file.filename,
+  };
+  console.log(uploadInfo);
+  return res.send(uploadInfo);
+});
+
 /* ~~~~~~~~~~SOCKET~~~~~~~~~~ */
 
 // Create a message

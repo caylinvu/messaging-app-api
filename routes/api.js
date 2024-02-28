@@ -75,6 +75,9 @@ router.get(
   /* verifyToken, */ messageController.getMessages,
 );
 
+// POST upload new message image
+router.post('/messages/send-img', upload.single('image'), messageController.uploadImage);
+
 /* ~~~~~~~~~~IMAGES~~~~~~~~~~ */
 
 // GET user profile picture
