@@ -139,3 +139,5 @@ module.exports = app;
 // go back later and change what is populating in queries!! only return fields that are needed in frontend!!
 
 // refactor to put passport strategies in their own folder and move login function to routes
+
+// update populatedb.js for what will be uploaded in railway database
