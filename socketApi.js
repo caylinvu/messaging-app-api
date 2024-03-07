@@ -18,6 +18,8 @@ io.on(
 
     // Set user.isOnline to true *******
     console.log('A user connected');
+    // console.log(currentUser.firstName);
+
     // console.log(socket.handshake.auth);
     // console.log(io.sockets.sockets.get(socket.id).handshake.auth.user);
 
@@ -150,5 +152,3 @@ io.on(
 );
 
 module.exports = socketApi;
-
-// ADD TOKEN VERIFICATION

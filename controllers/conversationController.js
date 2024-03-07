@@ -3,6 +3,7 @@ const Message = require('../models/message');
 const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 const fs = require('fs');
+const { body, validationResult, check } = require('express-validator');
 
 // Display all conversations which include the current user
 exports.getConversations = asyncHandler(async (req, res, next) => {
@@ -13,29 +14,64 @@ exports.getConversations = asyncHandler(async (req, res, next) => {
 });
 
 // Update group profile information (image and name)
-exports.updateConversation = asyncHandler(async (req, res, next) => {
-  const updatedInfo = {
-    groupName: req.body.groupName,
-    image: req.file ? req.file.filename : req.body.lastImage,
-  };
+exports.updateConversation = [
+  body('groupName', 'Group name is required').trim().isLength({ min: 1 }),
+  check('image')
+    .custom((value, { req }) => {
+      if (!req.file) {
+        return true;
+      } else if (req.file.mimetype === 'image/png') {
+        return '.png';
+      } else if (req.file.mimetype === 'image/jpg') {
+        return '.jpg';
+      } else if (req.file.mimetype === 'image/jpeg') {
+        return '.jpeg';
+      } else {
+        return false;
+      }
+    })
+    .withMessage('Only png, jpg, and jpeg files allowed'),
+  check('image')
+    .custom((value, { req }) => {
+      if (!req.file) {
+        return true;
+      } else if (req.file.size < 1024 * 1024 * 2) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .withMessage('Max file size of 2MB exceeded'),
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
 
-  // If req.file && req.body.lastImage, then delete last image from files
-  if (req.file && req.body.lastImage) {
-    fs.unlink(`public/images/${req.body.lastImage}`, (err) => {
-      if (err) console.log(err);
-    });
-  }
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
 
-  await Conversation.findByIdAndUpdate(
-    req.params.conversationId,
-    {
-      $set: updatedInfo,
-    },
-    {},
-  );
+    const updatedInfo = {
+      groupName: req.body.groupName,
+      image: req.file ? req.file.filename : req.body.lastImage,
+    };
 
-  return res.send(updatedInfo);
-});
+    // If req.file && req.body.lastImage, then delete last image from files
+    if (req.file && req.body.lastImage) {
+      fs.unlink(`public/images/${req.body.lastImage}`, (err) => {
+        if (err) console.log(err);
+      });
+    }
+
+    await Conversation.findByIdAndUpdate(
+      req.params.conversationId,
+      {
+        $set: updatedInfo,
+      },
+      {},
+    );
+
+    return res.send(updatedInfo);
+  }),
+];
 
 // Update group exclusions (or delete conv if all users in group > 2 are excluded)
 exports.addExclusion = asyncHandler(async (req, res, next) => {

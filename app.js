@@ -103,41 +103,25 @@ app.use(function (err, req, res, next) {
 
 module.exports = app;
 
-// CREATE CONTROLLER FUNCTIONS TO GET THINGS FROM DATABASE, SAVE THINGS TO DATABASE, UPDATE THINGS IN DATABASE, AND DELETE THINGS IN DATABASE
-// -- (REST) CREATE USER
-// -- (SOCKET) CREATE GROUP CONVERSATION
-// -- UPDATE USER INFO
-// ------ (REST) PROFILE INFO ON ONE FUNCTION (FIRST NAME, LAST NAME, IMAGE, AND STATUS)
-// -- UPDATE CONVERSATIONS
-// ------ (REST) GROUP INFO IN ONE FUNCTION (IMAGE AND NAME)
-// ------ (SOCKET? REST?) EXCLUSIONS IN ITS OWN FUNCTION (IF MEMBERS - EXCLUSIONS = 1, THEN DELETE CONVERSATION W/ MESSAGES)
-// -- (SOCKET? REST?) DELETE A CONVERSATION (ALONG WITH ITS MESSAGES)
+// ~~~~~~~~~~ ALL TO DO ~~~~~~~~~~
 
-// SET UP SOCKET.IO
-// EMIT/RECEIVE FUNCTIONS WILL USE CONTROLLER FUNCTIONS TO UPDATE THINGS IN DATABASE
-// when login, connect to socket to set online status????
-// on refresh, send token to backend to verify
+// JWT
+//--Add verifyToken back to routes
+//--Add verifyToken to socketApi??
+//--On refresh, send token to backend to verify??
 
-// when sending a message, clear conversation exclusions if there are any
+// Refine demo user
 
-// add verifyToken back to routes
+// Update populatedb.js for what will be uploaded in railway database
 
+// ~~~~~~~~~~ REFACTOR TO DO ~~~~~~~~~~
+
+// Socket.io
 // Refactor socket code (move database logic to controller functions)
+// Set up functions to manipulate things in socket events
 
 // Maybe refactor some functions to take advantage of $push and $pull more
 
-// add demo user
+// Queries - only return fields that are needed in frontend
 
-// add images to test database
-
-// add ability to change profile picture
-
-// add ability to send images
-
-// add login through google or github???
-
-// go back later and change what is populating in queries!! only return fields that are needed in frontend!!
-
-// refactor to put passport strategies in their own folder and move login function to routes
-
-// update populatedb.js for what will be uploaded in railway database
+// Put passport strategies in their own folder and move login func to routes
