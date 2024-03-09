@@ -1,5 +1,7 @@
 const Message = require('../models/message');
+const Conversation = require('../models/conversation');
 const asyncHandler = require('express-async-handler');
+const mongoose = require('mongoose');
 
 // Display all messages from conversations that include the current user
 exports.getAllMessages = asyncHandler(async (req, res, next) => {
@@ -12,6 +14,15 @@ exports.getAllMessages = asyncHandler(async (req, res, next) => {
 
 // Display all messages from a specific conversation
 exports.getMessages = asyncHandler(async (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.params.conversationId)) {
+    return res.status(404).json({ message: 'Chat not found' });
+  }
+
+  const conv = await Conversation.findById(req.params.conversationId).exec();
+  if (!conv) {
+    return res.status(404).json({ message: 'Chat not found' });
+  }
+
   const messagesInConversation = await Message.find({ conversation: req.params.conversationId })
     // .populate('conversation', '-lastMessage -timestamp')
     // .populate('author', 'firstName lastName')
