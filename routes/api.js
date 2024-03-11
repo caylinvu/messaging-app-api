@@ -20,32 +20,26 @@ router.get('/token', verifyToken, function (req, res, next) {
 /* ~~~~~~~~~~USERS~~~~~~~~~~ */
 
 // GET all users
-router.get('/users', /* verifyToken, */ userController.getUsers);
+router.get('/users', verifyToken, userController.getUsers);
 
 // POST new users
 router.post('/users', userController.createUser);
 
 // PUT user profile information
-router.put('/users/:userId', upload.single('image'), userController.updateUser);
+router.put('/users/:userId', verifyToken, upload.single('image'), userController.updateUser);
 
 // PUT update last read timestamp
-router.put(
-  '/users/:userId/timestamp/:conversationId',
-  /* verifyToken, */
-  userController.updateTimestamp,
-);
+router.put('/users/:userId/timestamp/:conversationId', verifyToken, userController.updateTimestamp);
 
 /* ~~~~~~~~~~CONVERSATIONS~~~~~~~~~~ */
 
 // GET all conversations which include the current user
-router.get(
-  '/users/:userId/conversations',
-  /* verifyToken, */ conversationController.getConversations,
-);
+router.get('/users/:userId/conversations', verifyToken, conversationController.getConversations);
 
 // PUT update group profile information (name & image)
 router.put(
   '/conversations/:conversationId',
+  verifyToken,
   upload.single('image'),
   conversationController.updateConversation,
 );
@@ -53,30 +47,29 @@ router.put(
 // PUT add group exclusion
 router.put(
   '/conversations/:conversationId/exclude/:userId',
-  /* verifyToken, */
+  verifyToken,
   conversationController.addExclusion,
 );
 
 // PUT remove group exclusion
 router.put(
   '/conversations/:conversationId/include/:userId',
+  verifyToken,
   conversationController.removeExclusion,
 );
 
 /* ~~~~~~~~~~MESSAGES~~~~~~~~~~ */
 
-// PROBABLY DO NOT NEED THIS ROUTE
-// GET all messages from conversations that include the current user
-router.get('/users/:userId/all-messages', /* verifyToken, */ messageController.getAllMessages);
-
 // GET all messages from a specific conversation
-router.get(
-  '/conversations/:conversationId/messages',
-  /* verifyToken, */ messageController.getMessages,
-);
+router.get('/conversations/:conversationId/messages', verifyToken, messageController.getMessages);
 
 // POST upload new message image
-router.post('/messages/send-img', upload.single('image'), messageController.uploadImage);
+router.post(
+  '/messages/send-img',
+  verifyToken,
+  upload.single('image'),
+  messageController.uploadImage,
+);
 
 /* ~~~~~~~~~~IMAGES~~~~~~~~~~ */
 
