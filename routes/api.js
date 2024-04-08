@@ -68,6 +68,7 @@ router.post(
   '/messages/send-img',
   verifyToken,
   upload.single('image'),
+  console.log('image uploaded/before message'),
   messageController.uploadImage,
 );
 
