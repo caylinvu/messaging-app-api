@@ -8,6 +8,7 @@ const app = require('../app');
 const debug = require('debug')('messaging-app:server');
 const http = require('http');
 const socketApi = require('../socketApi');
+require('dotenv').config();
 
 /**
  * Get port from environment and store in Express.
@@ -23,7 +24,7 @@ app.set('port', port);
 const server = http.createServer(app);
 socketApi.io.attach(server, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
+    origin: ['http://localhost:5173', process.env.ORIGIN],
   },
 });
 
