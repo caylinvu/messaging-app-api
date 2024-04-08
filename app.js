@@ -3,12 +3,12 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const compression = require('compression');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const User = require('./models/user');
@@ -24,6 +24,11 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+
+// compression/helmet setup
+app.use(compression());
+app.use(helmet());
+// app.use(helmet({ crossOriginResourcePolicy: false }));
 
 // mongoose connection setup
 const mongoose = require('mongoose');
