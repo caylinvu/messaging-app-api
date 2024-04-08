@@ -27,8 +27,7 @@ app.use(cors(corsOptions));
 
 // compression/helmet setup
 app.use(compression());
-app.use(helmet());
-// app.use(helmet({ crossOriginResourcePolicy: false }));
+app.use(helmet({ crossOriginResourcePolicy: false }));
 
 // mongoose connection setup
 const mongoose = require('mongoose');
