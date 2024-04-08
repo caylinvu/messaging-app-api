@@ -105,15 +105,6 @@ module.exports = app;
 
 // ~~~~~~~~~~ ALL TO DO ~~~~~~~~~~
 
-// JWT
-//--Add verifyToken back to routes
-//--Add verifyToken to socketApi??
-//--On refresh, send token to backend to verify??
-
-// Refine demo user
-
-// Update populatedb.js for what will be uploaded in railway database
-
 // ~~~~~~~~~~ REFACTOR TO DO ~~~~~~~~~~
 
 // Socket.io
