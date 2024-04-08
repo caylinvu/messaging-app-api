@@ -21,7 +21,7 @@ const app = express();
 // cors setup
 const cors = require('cors');
 const corsOptions = {
-  origin: ['http://localhost:5173', process.env.ORIGIN],
+  origin: ['http://localhost:5173', 'http://localhost:5174', process.env.ORIGIN],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
