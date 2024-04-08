@@ -16,12 +16,7 @@ io.on(
     const currentUser = await User.findById(socket.handshake.auth.user, '-email -password').exec();
     currentUser.isOnline = true;
 
-    // Set user.isOnline to true *******
     console.log('A user connected');
-    // console.log(currentUser.firstName);
-
-    // console.log(socket.handshake.auth);
-    // console.log(io.sockets.sockets.get(socket.id).handshake.auth.user);
 
     // Update in database
     await User.findByIdAndUpdate(
