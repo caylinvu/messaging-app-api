@@ -30,7 +30,7 @@ io.on(
     socket.broadcast.emit('onlineStatus', currentUser);
 
     // Trigger data refetch on frontend if connection is lost and reconnected
-    socket.emit('refetchData');
+    socket.emit('fetchData');
 
     // Join rooms of current user
     const conversations = await Conversation.find({ members: currentUser._id }).exec();
