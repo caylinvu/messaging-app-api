@@ -29,6 +29,9 @@ io.on(
     // Emit user.isOnline status to all users
     socket.broadcast.emit('onlineStatus', currentUser);
 
+    // Trigger data refetch on frontend if connection is lost and reconnected
+    socket.emit('refetchData');
+
     // Join rooms of current user
     const conversations = await Conversation.find({ members: currentUser._id }).exec();
     const convArray = conversations.map((conv) => {
